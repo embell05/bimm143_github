@@ -1,0 +1,262 @@
+---
+title: "Class 7: Machine Learning 1"
+author: "Emma Bell(A19247017)"
+format: pdf
+editor: visual
+---
+
+## Background
+
+Today we will begin our exploration of some important machine learning methods, namely **clusterring** and **dimensionality reduction**.
+
+Let's make up some input data for clustering where we know what the natural "clusters" are.
+
+The function `rnorm()` can be useful here.
+
+```{r}
+rnorm(5)
+```
+
+```{r}
+hist( rnorm(5000))
+```
+
+```{r}
+hist( rnorm(5000, mean=10))
+```
+
+> Q. Generate 30 random numbers centered at +3 and -3.
+
+```{r}
+rnorm(30, mean=3)
+```
+
+```{r}
+rnorm(30, mean=-3)
+```
+
+```{r}
+tmp <- c(rnorm(30, mean=3),
+        rnorm(30, mean=-3))
+tmp
+```
+
+(rev=reverse), (cbind= puts stuff in columns, rbind puts into rows)
+
+```{r}
+x <-cbind(x=tmp, y=rev(tmp))
+plot(x)
+```
+
+## K-means clustering
+
+The main function in "base R" for K-means clustering is called `kmeans()`
+
+```{r}
+km <- kmeans(x, 2)
+km
+```
+
+> Q. What component of the results object details the cluster sizes? size!
+
+```{r}
+km$size
+```
+
+> Q. What component of the results object details the cluster centres?
+
+```{r}
+km$centers
+```
+
+> Q. What component of the result objects details the cluster membership vector (ie our main result which points lie in which cluster)
+
+```{r}
+km$cluster
+```
+
+> Q. Plout our clustering results with points coloured by cluster and also add the cluster centres as new points coloured blue
+
+```{r}
+plot(x, col= km$cluster)
+points(km$centers, col="blue", pch=15)
+```
+
+> Q. run `kmeans()` again and this time produce four clusters (and call your result object `k4`) and make a results figure like above
+
+```{r}
+k4 <- kmeans(x, 4)
+k4
+```
+
+```{r}
+plot(x, col=k4$cluster)
+points(k4$centers, col="blue", pch=15)
+```
+
+The metric
+
+```{r}
+km$tot.withinss
+k4$tot.withinss
+```
+
+> Q. Let's try different number of K (centers) from 1 to 30 and see what the best result is
+
+```{r}
+ans <- NULL
+for(i in 1:30){
+ans <- c(ans, kmeans(x, centers= i)$tot.withinss)
+}
+ans
+```
+
+```{r}
+plot(ans, typ="o")
+```
+
+best result is 2- the 'elbow point, meaning the best number of clusters is 2. **Key-Point**: K means will impose a clustering structure on your data even if it is not there- it iwll always give you the answer you asked for even if that answer is silly!
+
+## Hierarchal Clustering
+
+The main function for this is called `hclust()`.
+
+Unlike `kmeans()` (which does all the work for you) you can't just pass `hclust()` our raw input data. It needs a "distance matrix" like the one returned from the `dist()` function.
+
+```{r}
+d <- dist(x)
+dist(x)
+```
+
+ie distance between point 1 and 2 is x, distance between point 1 and 3 is y etc.
+
+```{r}
+hc <- hclust(d)
+hc
+```
+
+```{r}
+plot(hc)
+```
+
+To extract our cluster membership vector from a `hclust()` result object we have to "cut" our tree at a given height to yield separate "groups/branches".
+
+```{r}
+plot(hc)
+abline(h=8, col="red", lty=2)
+```
+
+to do this we use the `cutree()` function on our `hclust()` object:
+
+```{r}
+grps <- cutree(hc, h=8)
+grps
+```
+
+```{r}
+table(grps, km$cluster)
+```
+
+## PCA of UK food data
+
+Import the dataset of food consumption in the UK
+
+```{r}
+url <- "https://tinyurl.com/UK-foods"
+x <- read.csv(url)
+x
+```
+
+> Q.  
+
+```{r}
+dim(x)
+```
+
+One solution is to set the row names is to do it by hands..
+
+```{r}
+rownames(x) <- x[,1]
+x[,1]
+```
+
+
+(computer went wierd and had to find the script.. thats why I might miss some annotations)
+
+
+```{r}
+x <- read.csv(url, row.names=1)
+x
+```
+
+## Spotting major differences and trends
+
+Is diffuclt even in this wee 17D dataset...
+
+```{r}
+barplot(as.matrix(x), beside=T, col=rainbow(nrow(x)))
+```
+
+## Pairs plot
+
+
+```{r}
+pairs(x, col=rainbow(10), pch=16)
+
+```
+
+Pheatmap- hotter is there is more stuff, colder means less
+
+```{r}
+library(pheatmap)
+pheatmap(as.matrix(x))
+```
+
+
+## PCA to the rescue
+
+The main PCA function in "base R" is called `prcomp()`. This function wants the transpose of our food data as input (ie the food as columsn and the countries as rows).
+
+```{r}
+pca <- prcomp(t(x))
+pca
+```
+```{r}
+summary(pca)
+```
+```{r}
+attributes(pca)
+```
+
+to make one of main PCA result figures we turn to `pca$x` the scores along our new PCs. This is called "PC plot" or "score plot" or "ordination plot"...
+
+```{r}
+pca$x
+```
+
+
+```{r}
+my_cols <- c("orange", "red", "blue", "darkgreen")
+```
+
+```{r}
+library(ggplot2)
+ggplot(pca$x) +
+  aes(PC1, PC2) +
+  geom_point(col=my_cols)
+
+```
+
+the second major result figure is called a "loadings plot" of "variable contributions plot" or "weight plot"
+
+```{r}
+pca$rotation
+```
+
+
+```{r}
+ggplot(pca$rotation) +
+  aes(PC1, rownames(pca$rotation)) +
+  geom_col()
+```
+
