@@ -1,4 +1,9 @@
+<<<<<<< Updated upstream
 # BIMM143
+=======
+# bimm143_github
+
+>>>>>>> Stashed changes
 My classwork from [BIMM143](https://bioboot.github.io/bimm143_W26/schedule/) at UC San Diego
 
 ## Index of Material
@@ -6,5 +11,7 @@ My classwork from [BIMM143](https://bioboot.github.io/bimm143_W26/schedule/) at 
 *Introductory Classes*
 
 Class 07 [Introduction to machine learning for Bioinformatics](class07/Class07.pdf)
+
+
 
 
