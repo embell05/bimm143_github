@@ -5,7 +5,7 @@ My classwork from [BIMM143](https://bioboot.github.io/bimm143_W26/schedule/) at 
 
 ## Index of Material
 
-Class 04: [Bioinformatics data analysis with R](Class04/Class04.html)
+Class 04: [Bioinformatics data analysis with R](Class04/Class04.md)
 
 Class 05: [Data exploration and visualization in R](Class05/Class05C/Class05.md)
 
