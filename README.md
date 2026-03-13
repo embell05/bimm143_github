@@ -5,6 +5,6 @@ My classwork from [BIMM143](https://bioboot.github.io/bimm143_W26/schedule/) at 
 
 * Introductory Classes
 
-Class 05 [Data Viz with Ggplot](class05/Class05B.pdf)
+Class 07 [Introduction to machine learning for Bioinformatics](class07/Class07.pdf)
 
 
