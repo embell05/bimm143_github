@@ -31,7 +31,7 @@ Class 15: Hands-on with Git and GitHub
 
 Class 16: Essential UNIX for bioinformatics
 
-Class 17: [Analyzing sequencing data in the cloud](Class17/Class17.md)
+Class 17: [Analyzing sequencing data in the cloud](class17/Class17.md)
 
 Class 18: [Mini Project: Investigating Pertussis Resurgence](Class18/Class18.md)
 
