@@ -7,7 +7,7 @@ My classwork from [BIMM143](https://bioboot.github.io/bimm143_W26/schedule/) at 
 
 *Introductory Classes*
 
-Class 07 [Introduction to machine learning for Bioinformatics](class07/Class07.md)
+Class 07 [Introduction to machine learning for Bioinformatics](Class07/class07.md)
 
 
 
