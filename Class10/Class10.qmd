@@ -2,6 +2,7 @@
 title: "Class 10"
 author: "Emma Bell (A19247017)"
 format: html
+prefer-html: true
 ---
 
 ## The PDB database
@@ -169,7 +170,7 @@ pdbs <- pdbaln(files, fit = TRUE, exefile="msa")
 Let's have a wee peek at our structures after 'fitting' or superposing
 ```{r}
 library(bio3dview)
-view.pdbs(pdbs, colorScheme="residue")
+#view.pdbs(pdbs, colorScheme="residue")
 ```
 We can run functions like `rmsd()` `rmsf()` and the best `pca()`
 
