@@ -1,0 +1,109 @@
+---
+title: "Class 17"
+author: "Emma Bell (A19247017)"
+format: pdf
+toc: true
+---
+
+## Downstream Analysis
+
+This is from class 17- we are now going to explore the large data set.
+
+I just installed the BiocManager `tximport`
+
+```{r}
+library(tximport)
+
+# setup the folder and file-names to read
+folders <- dir(pattern="SRR21568")
+samples <- sub("_quant", "", folders)
+files <- file.path( folders, "abundance.h5" )
+names(files) <- samples
+
+txi.kallisto <- tximport(files, type = "kallisto", txOut = TRUE)
+```
+
+```{r}
+head(txi.kallisto$counts)
+```
+
+We now have our estimated transcript counts for each sample in R. We can see how many transcripts we have for each sample:
+
+
+```{r}
+colSums(txi.kallisto$counts)
+```
+
+And how many transcripts are detected in at least one sample:
+
+```{r}
+sum(rowSums(txi.kallisto$counts)>0)
+```
+
+Before subsequent analysis, we might want to filter out those annotated transcripts with no reads:
+
+```{r}
+to.keep <- rowSums(txi.kallisto$counts) > 0
+kset.nonzero <- txi.kallisto$counts[to.keep,]
+```
+And those with no change over the samples:
+```{r}
+keep2 <- apply(kset.nonzero,1,sd)>0
+x <- kset.nonzero[keep2,]
+```
+
+
+## Principal Component Analysis
+
+```{r}
+pca <- prcomp(t(x), scale=TRUE)
+summary(pca)
+```
+Now we can visualise it!
+
+```{r}
+plot(pca$x[,1], pca$x[,2],
+     col=c("blue","blue","red","red"),
+     xlab="PC1", ylab="PC2", pch=16)
+```
+> Q. Use ggplot to make a similar figure of PC1 vs PC2 and a separate figure PC1 vs PC3 and PC2 vs PC3.
+
+```{r}
+library(ggplot2)
+
+```
+
+```{r}
+library(ggrepel)
+
+mycols <- c("blue","blue","red","red")
+
+ggplot(pca$x) +
+  aes(PC1, PC2, label=rownames(pca$x)) +
+  geom_point( col=mycols ) +
+  geom_text_repel( col=mycols ) +
+  theme_bw()
+
+```
+
+```{r}
+ggplot(pca$x) +
+  aes(PC1, PC3, label=rownames(pca$x)) +
+  geom_point( col=mycols ) +
+  geom_text_repel( col=mycols ) +
+  theme_bw()
+
+
+```
+```{r}
+ggplot(pca$x) +
+  aes(PC2, PC3, label=rownames(pca$x)) +
+  geom_point( col=mycols ) +
+  geom_text_repel( col=mycols ) +
+  theme_bw()
+
+
+```
+The plot makes it clear that PC1 separates the two control samples (SRR2156848 and SRR2156849) from the two enhancer-targeting CRISPR-Cas9 samples (SRR2156850 and SRR2156851). PC2 separates the two control samples from each other, and PC3 separates the two enhancer-targeting CRISPR samples from each other. This could be investigated further to see which genes result in these separation patterns. It is also at least slightly reassuring, implying that there are considerable differences between the treated and control samples.
+
+

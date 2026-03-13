@@ -1,0 +1,459 @@
+---
+title: "Class 18"
+author: "Emma Bell (A19247017)"
+format: pdf
+toc: true
+---
+
+
+## Background
+
+Pertussis (aka whooping cough) is a common lung infection caused by the bacteria B. pertussis
+
+This can infect all ages but is most severe for those under 1 years of age
+
+The CDC track the number of reported cases in the US.
+We can "scrape" this with **datapasta** package.
+
+```{r}
+cdc <- data.frame(
+  year = c(
+    1922L,
+    1923L,
+    1924L,
+    1925L,
+    1926L,
+    1927L,
+    1928L,
+    1929L,
+    1930L,
+    1931L,
+    1932L,
+    1933L,
+    1934L,
+    1935L,
+    1936L,
+    1937L,
+    1938L,
+    1939L,
+    1940L,
+    1941L,
+    1942L,
+    1943L,
+    1944L,
+    1945L,
+    1946L,
+    1947L,
+    1948L,
+    1949L,
+    1950L,
+    1951L,
+    1952L,
+    1953L,
+    1954L,
+    1955L,
+    1956L,
+    1957L,
+    1958L,
+    1959L,
+    1960L,
+    1961L,
+    1962L,
+    1963L,
+    1964L,
+    1965L,
+    1966L,
+    1967L,
+    1968L,
+    1969L,
+    1970L,
+    1971L,
+    1972L,
+    1973L,
+    1974L,
+    1975L,
+    1976L,
+    1977L,
+    1978L,
+    1979L,
+    1980L,
+    1981L,
+    1982L,
+    1983L,
+    1984L,
+    1985L,
+    1986L,
+    1987L,
+    1988L,
+    1989L,
+    1990L,
+    1991L,
+    1992L,
+    1993L,
+    1994L,
+    1995L,
+    1996L,
+    1997L,
+    1998L,
+    1999L,
+    2000L,
+    2001L,
+    2002L,
+    2003L,
+    2004L,
+    2005L,
+    2006L,
+    2007L,
+    2008L,
+    2009L,
+    2010L,
+    2011L,
+    2012L,
+    2013L,
+    2014L,
+    2015L,
+    2016L,
+    2017L,
+    2018L,
+    2019L,
+    2020L,
+    2021L,
+    2022L,
+    2023L,
+    2024L,
+    2025L
+  ), 
+  cases = c(
+    107473,
+    164191,
+    165418,
+    152003,
+    202210,
+    181411,
+    161799,
+    197371,
+    166914,
+    172559,
+    215343,
+    179135,
+    265269,
+    180518,
+    147237,
+    214652,
+    227319,
+    103188,
+    183866,
+    222202,
+    191383,
+    191890,
+    109873,
+    133792,
+    109860,
+    156517,
+    74715,
+    69479,
+    120718,
+    68687,
+    45030,
+    37129,
+    60886,
+    62786,
+    31732,
+    28295,
+    32148,
+    40005,
+    14809,
+    11468,
+    17749,
+    17135,
+    13005,
+    6799,
+    7717,
+    9718,
+    4810,
+    3285,
+    4249,
+    3036,
+    3287,
+    1759,
+    2402,
+    1738,
+    1010,
+    2177,
+    2063,
+    1623,
+    1730,
+    1248,
+    1895,
+    2463,
+    2276,
+    3589,
+    4195,
+    2823,
+    3450,
+    4157,
+    4570,
+    2719,
+    4083,
+    6586,
+    4617,
+    5137,
+    7796,
+    6564,
+    7405,
+    7298,
+    7867,
+    7580,
+    9771,
+    11647,
+    25827,
+    25616,
+    15632,
+    10454,
+    13278,
+    16858,
+    27550,
+    18719,
+    48277,
+    28639,
+    32971,
+    20762,
+    17972,
+    18975,
+    15609,
+    18617,
+    6124,
+    2116,
+    3044,
+    7063,
+    22538,
+    21996
+  )
+)
+```
+
+
+> Q. Make a plot of `year` vs `cases`
+
+```{r}
+library(ggplot2)
+ggplot(cdc)+
+  aes(year, cases) +
+  geom_line()
+```
+
+> Q Add some major milestones including the first wP vaccine roll-out (1946), the switch to the newer aP vaccine (1996), the COVID years (2020).
+
+```{r}
+library(ggplot2)
+ggplot(cdc)+
+  aes(year, cases) +
+  geom_line() +
+  geom_vline(xintercept=1946, col="maroon", lty=2) +
+  geom_vline(xintercept=1996, col="lightpink", lty=2) +
+  geom_vline(xintercept=2020, col="magenta", lty=2)
+```
+
+> Q. What do you notice after 1946?
+
+There were high case numbers in the pre-1940s. After the roll out of this vaccine, the case numbers decrease dramatically. In the 1970s-90s, cases are very low. 
+
+>Q. Describe what happened after the introduction of the aP vaccine? Do you have a possible explanation for the observed trend?
+
+After the introduction of this new vaccine, which is considered safer and with less side effects, cases starts climbing again. The problem could be that no one was getting their boosters. the lag is very consistant that suggests there is a problem with efficiency of this vaccine. The aP protection wanes faster that wP- we do not know why (hence the booster vaccines)
+
+Interestingly, during the COVID years, cases decrease because social distancing measures and lockdown stopped people from catching it.
+
+
+
+**Why is this vaccine preventable disease on the upswing?**
+To answer this question we need to investigate the mechanisms underlying waning protection against pertussis. This requires evaluation of pertussis-specific immune responses over time in wP and aP vaccinated individuals.
+
+## CMI-PB project
+[Computational Models of Immunity- Pertussis Boost](https://www.cmi-pb.org/) project aimst o provide the scientific community with this very information.
+
+They make their data available via JSON format APIs. We can read this in R with the `read_json()` function from the **jsonlite** package:
+
+```{r}
+library(jsonlite)
+
+subject <- read_json("https://www.cmi-pb.org/api/v5_1/subject"
+                     , simplifyVector=TRUE)
+
+head(subject)
+```
+
+> Q4. How many wP and aP individuals are in this `subject` table?
+
+```{r}
+table(subject$infancy_vac)
+```
+
+> Q5. How many Male and Female subjects/patients are in the dataset?
+
+```{r}
+table(subject$biological_sex)
+```
+
+
+> Q6. What is the breakdown of race and biological sex (e.g. number of Asian females, White males etc…)? Is this dataset representative of the US population?
+
+```{r}
+table(subject$race, subject$biological_sex)
+```
+No it is not representative, as there are more women than mena and also, there is not enough representation of some races.
+
+Let's read more databases
+
+```{r}
+specimen <- read_json("https://www.cmi-pb.org/api/v5_1/specimen",
+                     simplifyVector = TRUE )
+ab_titer <- read_json("https://www.cmi-pb.org/api/v5_1/plasma_ab_titer",
+                      simplifyVector = TRUE)
+```
+
+
+
+```{r}
+head(specimen)
+```
+
+```{r}
+head(ab_titer)
+```
+
+To analyse this data we need to first "join" (merge/link) the different tables so we have all the data in one place not spread across different tables.
+
+We can use the `*_join()` family of functions from **dplyr** to do this.
+
+
+```{r}
+library(dplyr)
+meta <- inner_join(subject, specimen)
+head(meta)
+```
+
+```{r}
+abdata <- inner_join(ab_titer, meta)
+head(abdata)
+```
+
+> Q. What Ab isotypes are measured?
+
+```{r}
+table(abdata$isotype)
+```
+
+
+> Q. What Ags are reported
+
+```{r}
+table(abdata$antigen)
+```
+Let's focus on the Ags and make a plot of MFI_normalised for all Ag.
+
+```{r}
+igg <- abdata |>
+  filter(isotype == "IgG")
+head(igg)
+```
+
+```{r}
+ggplot(igg) +
+  aes(MFI_normalised, antigen) +
+  geom_boxplot()
+```
+
+> Q. Is there a difference for aP vs wP individuals with these values?
+
+
+```{r}
+ggplot(igg) +
+  aes(MFI_normalised, antigen) +
+  geom_boxplot() +
+  facet_wrap(~infancy_vac)
+```
+
+OR
+
+```{r}
+ggplot(igg) +
+  aes(MFI_normalised, antigen, col=infancy_vac) +
+  geom_boxplot()
+```
+> Q. Is there a temporal response - ie do values increase or decrease over time
+
+```{r}
+ggplot(igg) +
+  aes(MFI_normalised, antigen, col= infancy_vac) +
+  geom_boxplot() +
+  facet_wrap(~visit)
+```
+
+
+## Focus on PT (Pertussis Toxin) Ag
+
+```{r}
+pt.igg.21 <- igg |> filter(antigen == "PT",
+              dataset == "2021_dataset")
+```
+
+
+```{r}
+ggplot(pt.igg.21) +
+  aes(planned_day_relative_to_boost, MFI_normalised,
+      col=infancy_vac,
+      group = subject_id) + 
+  geom_point() +
+  geom_line() +
+  geom_vline(xintercept= 14, lty=2)
+
+```
+```{r}
+library(dplyr)
+
+avg_df <- pt.igg.21 %>%
+  group_by(infancy_vac, planned_day_relative_to_boost) %>%
+  summarise(mean_MFI = mean(MFI_normalised), .groups = "drop")
+
+```
+
+
+
+```{r}
+ggplot(pt.igg.21) +
+  aes(planned_day_relative_to_boost, MFI_normalised,
+      color = infancy_vac,
+      group = subject_id) +
+  geom_point() +
+  geom_line() +
+  geom_vline(xintercept = 14, lty = 2) +
+ stat_summary(aes(group = infancy_vac),
+               fun = mean,
+               geom = "line",
+               linewidth = 1.4)+
+  labs(
+    title = "CMI-PB 2021 dataset IgG PT",
+    subtitle = "Dashed lines at day 0 (pre boost) and day 14 (post boost)",
+    x = "Day relative to boost",
+    y = "Normalised MFI",
+    colour = "infancy_vac"
+  ) 
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
