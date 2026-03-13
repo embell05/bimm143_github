@@ -9,7 +9,7 @@ Class 04: [Bioinformatics data analysis with R](Class04/Class04.html)
 
 Class 05: [Data exploration and visualization in R](Class05/Class05C/Class05.md)
 
-Class 06: [R functions and R packages from CRAN and BioConductor](Class06/Class06/Class06HW.md)
+Class 06: [R functions and R packages from CRAN and BioConductor](Class06/Class06/class6.md)
 
 Class 07: [Introduction to machine learning for Bioinformatics](Class07/class07.md)
 
